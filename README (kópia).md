@@ -19,7 +19,6 @@ You should run container:
         -d -P \
         -v $HOME/.ssh/authorized_keys:/authorized_keys:ro \
         -p 49158:22 \
-        --volume=/home/palo:/mnt/palo:ro \
         ssh_server 
 
 ## Run a test_sshd container

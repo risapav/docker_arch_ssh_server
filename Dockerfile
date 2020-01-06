@@ -6,10 +6,9 @@ MAINTAINER Pavol Risa "risapav at gmail"
 RUN pacman -Sy \
 	&& yes | pacman -S \
 		openssh \
-		mc 
-#		openocd \
-#	&& paccache --remove \
-#    && rm -rf /tmp/* /var/tmp/*
+		mc \
+		openocd \
+    && rm -rf /tmp/* /var/tmp/*
 	
 
 # configure ssh
