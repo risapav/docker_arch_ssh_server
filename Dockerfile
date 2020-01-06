@@ -4,28 +4,32 @@ MAINTAINER Pavol Risa "risapav at gmail"
 
 #update OS
 RUN pacman -Sy \
-	&& yes | pacman -S openssh \
-		sudo \
+	&& yes | pacman -S \
+		openssh \
 		mc 
 #		openocd \
 #	&& paccache --remove \
 #    && rm -rf /tmp/* /var/tmp/*
 	
 
+# configure ssh
+RUN sed -i \
+        -e 's/^#*\(PermitRootLogin\) .*/\1 yes/' \
+        -e 's/^#*\(PasswordAuthentication\) .*/\1 yes/' \
+        -e 's/^#*\(PermitEmptyPasswords\) .*/\1 yes/' \
+        -e 's/^#*\(UsePAM\) .*/\1 no/' \
+        /etc/ssh/sshd_config
+
+# Generate host keys
+RUN /usr/bin/ssh-keygen -A
+
+# Add password to root user
+RUN	echo 'root:root' | chpasswd
+
 RUN systemctl enable sshd
-#RUN systemctl start sshd	
 
-RUN mkdir /var/run/sshd
-RUN echo 'root:root' | chpasswd
+# Expose tcp port
+EXPOSE	 22
 
-RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
-RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
-
-RUN mkdir /root/.ssh
-
-ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile    
-
-EXPOSE 22
-
-CMD    [systemctl start sshd]
+# Run openssh daemon
+CMD	["/usr/sbin/sshd", "-D"]
