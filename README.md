@@ -20,6 +20,7 @@ You should run container:
         -v $HOME/.ssh/authorized_keys:/authorized_keys:ro \
         -p 49158:22 \
         --volume=/home/palo:/mnt/palo:ro \
+        --device=/dev/ttyUSB0 \
         ssh_server 
 
 ## Run a test_sshd container
