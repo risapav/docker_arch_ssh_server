@@ -6,7 +6,6 @@ MAINTAINER Pavol Risa "risapav at gmail"
 RUN pacman -Sy \
 	&& yes | pacman -S \
 		openssh \
-		vim \
 		nano \
 		ranger \
 		minicom \
